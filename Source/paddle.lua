@@ -1,16 +1,16 @@
-local DISPLAY_WIDTH <const> = playdate.display.getWidth()
-local DISPLAY_HEIGHT <const> = playdate.display.getHeight()
-local PADDLE_WIDTH <const> = 40
-local PADDLE_HEIGHT <const> = 10
-
 local gfx <const> = playdate.graphics
 
 class("paddle").extends()
 
-function paddle:init()
+function paddle:init(width)
+  local paddleWidth = width or 40
+
   self.paddle = {
-    x = DISPLAY_WIDTH / 2 - (PADDLE_WIDTH / 2),
-    y = DISPLAY_HEIGHT - 20,
+    x = CONST.DISPLAY_WIDTH / 2 - (paddleWidth / 2),
+    y = CONST.DISPLAY_HEIGHT - 20,
+
+    width = paddleWidth,
+    height = 10,
   }
 end
 
@@ -23,5 +23,5 @@ end
 
 function paddle:draw()
   local paddle = self.paddle
-  gfx.fillRect(paddle.x, paddle.y, PADDLE_WIDTH, PADDLE_HEIGHT)
+  gfx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
 end

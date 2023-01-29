@@ -3,33 +3,22 @@ import("CoreLibs/graphics")
 import("CoreLibs/sprites")
 import("CoreLibs/timer")
 
-local gfx <const> = playdate.graphics
+import("game")
 
-import("ball")
-import("paddle")
+CONST = import("constants")
 
-local ball = ball()
-local paddle = paddle()
+local game = game()
 
 local function initalize()
-  playdate.display.setRefreshRate(50)
+  playdate.display.setRefreshRate(CONST.REFRESH_RATE)
+  playdate.display.setScale(CONST.SCALE)
 end
 
 initalize()
 
-local function updateGame()
-  paddle:update()
-  ball:update()
-end
-
-local function drawGame()
-  gfx.clear()
-  paddle:draw()
-  ball:draw()
-end
-
 function playdate.update()
-  updateGame()
-  drawGame()
+  game:update()
+  game:draw()
+
   playdate.drawFPS(0, 0)
 end
