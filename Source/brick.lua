@@ -16,18 +16,46 @@ local variants = {
 
 class("brick").extends()
 
+function brick:rect()
+  local brick = self.brick
+
+  return {
+    x1 = brick.x,
+    x2 = brick.x + brick.width,
+    y1 = brick.y,
+    y2 = brick.y + brick.height,
+  }
+end
+
 function brick:init(x, y, width, height, variant)
   self.brick = {
     x = x,
     y = y,
-    alpha = 0.3,
-    variant = variant or 0,
     width = width or 40,
     height = height or 10,
+    alpha = 0.3,
+    variant = variant or 0,
   }
 end
 
 function brick:update()
+  local brick = self.brick
+
+  self:updateStyle()
+end
+
+function brick:draw()
+  local brick = self.brick
+
+  -- gfx.drawText(brick.alpha, 30, 10)
+  -- gfx.drawText(brick.variant, 60, 10)
+
+  playdate.graphics.setDitherPattern(brick.alpha, variants[brick.variant])
+  gfx.fillRect(brick.x, brick.y, brick.width, brick.height)
+  playdate.graphics.setColor(playdate.graphics.kColorBlack)
+end
+
+function brick:updateStyle()
   local brick = self.brick
 
   if playdate.buttonJustPressed(playdate.kButtonUp) then
@@ -58,15 +86,4 @@ function brick:update()
       brick.variant += 1
     end
   end
-end
-
-function brick:draw()
-  local brick = self.brick
-
-  gfx.drawText(brick.alpha, 30, 10)
-  gfx.drawText(brick.variant, 60, 10)
-
-  playdate.graphics.setDitherPattern(brick.alpha, variants[brick.variant])
-  gfx.fillRect(brick.x, brick.y, brick.width, brick.height)
-  playdate.graphics.setColor(playdate.graphics.kColorBlack)
 end

@@ -20,5 +20,5 @@ function playdate.update()
   game:update()
   game:draw()
 
-  playdate.drawFPS(0, 0)
+  -- playdate.drawFPS(0, 0)
 end

@@ -1,0 +1,6 @@
+name=PlayOut
+author=Simon Sawert
+description=Breakout but with a crank!
+bundleID=com.bombix.playout
+version=0.1
+buildNumber=1

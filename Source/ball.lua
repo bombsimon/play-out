@@ -5,13 +5,15 @@ local gfx <const> = playdate.graphics
 class("ball").extends()
 
 function ball:init()
+  local initialSpeed = 2
+
   self.ball = {
     x = CONST.DISPLAY_WIDTH / 2 - (BALL_SIZE / 2),
     y = CONST.DISPLAY_HEIGHT - 25,
-    xspeed = 2,
-    yspeed = -2,
-    bounrces = 1,
-    paddleHit = false,
+    speed = initialSpeed,
+    xspeed = 0,
+    yspeed = -initialSpeed,
+    bounces = 1,
   }
 end
 
@@ -23,14 +25,10 @@ function ball:update()
 
   if ball.x + BALL_SIZE >= CONST.DISPLAY_WIDTH or ball.x <= 0 then
     ball.xspeed = -ball.xspeed
-    ball.bounrces = ball.bounrces + 1
   end
 
-  if ball.y + BALL_SIZE >= CONST.DISPLAY_HEIGHT or ball.y <= 0 or ball.paddleHit then
+  if ball.y + BALL_SIZE >= CONST.DISPLAY_HEIGHT or ball.y <= 0 then
     ball.yspeed = -ball.yspeed
-    ball.bounrces = ball.bounrces + 1
-
-    ball.paddleHit = false
   end
 
   ball.x += ball.xspeed
@@ -42,23 +40,26 @@ function ball:draw()
   gfx.fillCircleAtPoint(ball.x, ball.y, BALL_SIZE)
 end
 
-function ball:paddleHit(paddle)
+function ball:redirectY()
   local ball = self.ball
-
-  if self:overlap(
-    paddle.paddle.x,
-    paddle.paddle.x + paddle.paddle.width,
-    paddle.paddle.y,
-    paddle.paddle.y + paddle.paddle.height
-  )
-  then
-    ball.paddleHit = true
-  end
+  ball.yspeed = -ball.yspeed
 end
 
-function ball:overlap(x1, x2, y1, y2)
-  local ball = self.ball
-  bx, by = ball.x, ball.y
+function ball:redirect(side, ratio)
+  print(side)
+  print(ratio)
 
-  return bx >= x1 and bx <= x2 and by >= y1 and by <= y2
+  local ball = self.ball
+  local newXSpeed = ball.speed * ratio
+  if side == -1 then
+    newXSpeed = -newXSpeed
+  end
+
+  local newYSpeed = ball.speed - ratio
+  if ball.yspeed > 0 then
+    newYSpeed = -newYSpeed
+  end
+
+  ball.xspeed = newXSpeed
+  ball.yspeed = newYSpeed
 end
