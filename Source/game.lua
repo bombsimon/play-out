@@ -7,27 +7,50 @@ import("brick")
 local gfx <const> = playdate.graphics
 local img <const> = playdate.graphics.image
 
+local heart = playdate.graphics.image.new("images/heart")
+
 function game:init()
   self.lives = CONST.NUMBER_OF_LIVES
-  self.state = CONST.STATE.RUNNING
+  self.state = CONST.STATE.PAUSED
   self.ball = ball()
   self.paddle = paddle()
 
   self.bricks = {}
 
-  for row = 0, 5 do
-    local topPadding = row * 15
+  -- todo: prepare for multiple levels
+  local level = {
+    { 1, 1, 1, 1, 1, 1, 1 },
+    { 0, 0, 1, 1, 1, 0, 0 },
+    { 2, 2, 3, 3, 3, 2, 2 },
+    { 0, 0, 1, 1, 1, 0, 0 },
+    { 1, 1, 1, 1, 1, 1, 1 },
+  }
 
-    for i = 0, 6 do
-      local spacing = i * 10
-      local pos = spacing + i * 40
+  for i, row in ipairs(level) do
+    local topPadding = i * 15
 
-      table.insert(self.bricks, brick(25 + pos, 40 + topPadding, 40, 10, row + 1))
+    for j, col in ipairs(row) do
+      if col ~= 0 then
+        local spacing = j * 5
+        local pos = spacing + j * 40
+
+        table.insert(self.bricks, brick(pos, 20 + topPadding, 40, 10, col))
+      end
     end
   end
 end
 
 function game:update()
+  if self.state ~= CONST.STATE.RUNNING then
+    self.paddle:update()
+    self.ball:reset(self.paddle:getCenter())
+
+    if playdate.buttonJustPressed(playdate.kButtonA) then
+      self.state = CONST.STATE.RUNNING
+    end
+    return
+  end
+
   for idx, brick in ipairs(self.bricks) do
     brick:update()
 
@@ -46,14 +69,20 @@ function game:update()
   end
 
   if self.ball:update() then
-    self.state = CONST.STATE.GAME_OVER
+    if self.lives == 1 then
+      self.state = CONST.STATE.GAME_OVER
+    else
+      self.lives -= 1
+      self.state = CONST.STATE.PAUSED
+      self.ball:reset(self.paddle:getCenter())
+    end
   end
 end
 
 function game:draw()
   gfx.clear()
 
-  if self.state == CONST.STATE.RUNNING then
+  if self.state ~= CONST.STATE.GAME_OVER then
     self:drawGame()
   else
     local endText = "GAME OVER!"
@@ -65,6 +94,11 @@ function game:draw()
 end
 
 function game:drawGame()
+  for i = 1, self.lives do
+    local leftPadding = i * 10
+    heart:draw(CONST.DISPLAY_WIDTH - leftPadding - 10, 10)
+  end
+
   for _, brick in ipairs(self.bricks) do
     brick:draw()
   end

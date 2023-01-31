@@ -1,20 +1,28 @@
 local BALL_SIZE <const> = 3
+local INITIAL_SPEED <const> = 3
 
 local gfx <const> = playdate.graphics
 
 class("ball").extends()
 
 function ball:init()
-  local initialSpeed = 2
-
   self.ball = {
     x = CONST.DISPLAY_WIDTH / 2 - (BALL_SIZE / 2),
     y = CONST.DISPLAY_HEIGHT - 25,
-    speed = initialSpeed,
+    speed = INITIAL_SPEED,
     xspeed = 0,
-    yspeed = -initialSpeed,
+    yspeed = -INITIAL_SPEED,
     bounces = 1,
   }
+end
+
+function ball:reset(x, y)
+  local ball = self.ball
+
+  ball.x = x
+  ball.y = CONST.DISPLAY_HEIGHT - 25
+  ball.xspeed = 0
+  ball.yspeed = INITIAL_SPEED
 end
 
 function ball:update()
@@ -46,9 +54,6 @@ function ball:redirectY()
 end
 
 function ball:redirect(side, ratio)
-  print(side)
-  print(ratio)
-
   local ball = self.ball
   local newXSpeed = ball.speed * ratio
   if side == -1 then
