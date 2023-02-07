@@ -4,12 +4,17 @@ import("CoreLibs/sprites")
 import("CoreLibs/timer")
 
 import("game")
+import("menu")
 
 CONST = import("constants")
 
 local game = game()
+setupMenu(game)
 
 local function initalize()
+  local fnt = playdate.graphics.font.new("fonts/Mini Mono/Mini Mono")
+  playdate.graphics.setFont(fnt)
+
   playdate.display.setRefreshRate(CONST.REFRESH_RATE)
   playdate.display.setScale(CONST.SCALE)
 end

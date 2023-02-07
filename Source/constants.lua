@@ -6,6 +6,7 @@ C.DISPLAY_WIDTH = playdate.display.getWidth() / C.SCALE
 C.DISPLAY_HEIGHT = playdate.display.getHeight() / C.SCALE
 C.MID_X = C.DISPLAY_WIDTH / 2
 C.MID_Y = C.DISPLAY_HEIGHT / 2
+C.TOP_SPACING = 15
 
 -- Player lifecycle
 C.NUMBER_OF_LIVES = 3

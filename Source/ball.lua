@@ -16,7 +16,7 @@ function ball:init()
   }
 end
 
-function ball:reset(x, y)
+function ball:reset(x, _y)
   local ball = self.ball
 
   ball.x = x
@@ -35,7 +35,7 @@ function ball:update()
     ball.xspeed = -ball.xspeed
   end
 
-  if ball.y + BALL_SIZE >= CONST.DISPLAY_HEIGHT or ball.y <= 0 then
+  if ball.y + BALL_SIZE >= CONST.DISPLAY_HEIGHT or ball.y <= CONST.TOP_SPACING + BALL_SIZE then
     ball.yspeed = -ball.yspeed
   end
 

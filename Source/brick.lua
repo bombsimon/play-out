@@ -16,25 +16,30 @@ local variants = {
 
 class("brick").extends()
 
-function brick:rect()
-  local brick = self.brick
-
-  return {
-    x1 = brick.x,
-    x2 = brick.x + brick.width,
-    y1 = brick.y,
-    y2 = brick.y + brick.height,
-  }
-end
+local brickTypeAlpha = {
+  ["1"] = 0.4,
+  ["2"] = 0.4,
+  ["3"] = 0.4,
+  ["4"] = 0.4,
+  ["5"] = 0.4,
+  ["6"] = 0.4,
+  ["7"] = 0.4,
+  ["8"] = 0.8,
+  ["9"] = 0.4,
+  ["10"] = 0.4,
+}
 
 function brick:init(x, y, width, height, variant)
+  local variant = variant or 0
+  local alpha = brickTypeAlpha[tostring(variant)]
+
   self.brick = {
     x = x,
     y = y,
     width = width or 40,
     height = height or 10,
-    alpha = 0.3,
-    variant = variant or 0,
+    alpha = alpha,
+    variant = variant,
   }
 end
 
@@ -44,11 +49,15 @@ function brick:update()
   self:updateStyle()
 end
 
+function brick:collide()
+  local brick = self.brick
+  brick.variant -= 2
+
+  return brick.variant < 1
+end
+
 function brick:draw()
   local brick = self.brick
-
-  -- gfx.drawText(brick.alpha, 30, 10)
-  -- gfx.drawText(brick.variant, 60, 10)
 
   playdate.graphics.setDitherPattern(brick.alpha, variants[brick.variant])
   gfx.fillRect(brick.x, brick.y, brick.width, brick.height)
@@ -86,4 +95,15 @@ function brick:updateStyle()
       brick.variant += 1
     end
   end
+end
+
+function brick:rect()
+  local brick = self.brick
+
+  return {
+    x1 = brick.x,
+    x2 = brick.x + brick.width,
+    y1 = brick.y,
+    y2 = brick.y + brick.height,
+  }
 end
