@@ -4,3 +4,4 @@ description=Breakout but with a crank!
 bundleID=com.bombix.playout
 version=0.2
 buildNumber=1
+imagePath=images/title-card.png
