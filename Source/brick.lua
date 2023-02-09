@@ -59,8 +59,12 @@ end
 function brick:draw()
   local brick = self.brick
 
+  local offset = brick.height / 2
+
   playdate.graphics.setDitherPattern(brick.alpha, variants[brick.variant])
-  gfx.fillRect(brick.x, brick.y, brick.width, brick.height)
+  gfx.fillCircleAtPoint(brick.x + offset, brick.y + offset, offset)
+  gfx.fillCircleAtPoint(brick.x + brick.width - offset, brick.y + offset, offset)
+  gfx.fillRect(brick.x + offset, brick.y, brick.width - offset * 2, brick.height)
   playdate.graphics.setColor(playdate.graphics.kColorBlack)
 end
 

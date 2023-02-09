@@ -16,6 +16,7 @@ C.STATE = {
   RUNNING = 1,
   PAUSED = 2,
   GAME_OVER = 3,
+  GAME_END = 4,
 }
 
 return C

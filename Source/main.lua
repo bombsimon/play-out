@@ -8,6 +8,8 @@ import("menu")
 
 CONST = import("constants")
 
+math.randomseed(playdate.getSecondsSinceEpoch())
+
 local game = game()
 setupMenu(game)
 
